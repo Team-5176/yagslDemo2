@@ -15,10 +15,17 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+  public static final double MAX_SPEED = Units.feetToMeters(4.5);
+
+  public static final class DrivebaseConstants
+  {
+    // Hold time on motor brakes when disabled
+    public static final double WHEEL_LOCK_TIME = 10; // seconds
+  }
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
     public static final double DEADBAND = 0.05;
   }
-  public static final double MAX_SPEED = Units.feetToMeters(4.5);
 
 }

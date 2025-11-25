@@ -107,8 +107,8 @@ public class RobotContainer {
     
     if (RobotBase.isSimulation())
     {
-      // drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
-      drivebase.setDefaultCommand(driveFieldOrientedAngularVelocitySim);
+      drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
+      // drivebase.setDefaultCommand(driveFieldOrientedAngularVelocitySim);
       // drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocityKeyboard);
     } else
     {
@@ -162,7 +162,7 @@ public class RobotContainer {
       m_driverController.rightBumper().onTrue(Commands.none());
     }
 
-
+  }
 
 
   /**
@@ -173,5 +173,9 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     return Autos.exampleAuto(m_exampleSubsystem);
+  }
+  public void setMotorBrake(boolean brake)
+  {
+    drivebase.setMotorBrake(brake);
   }
 }
