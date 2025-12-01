@@ -63,13 +63,16 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public SwerveSubsystem() {
 
-    boolean blueAlliance = false;
-    Pose2d startingPose = blueAlliance ? new Pose2d(new Translation2d(Meter.of(1),
+    // Doesn't work in simulation
+    // boolean redAlliance = isRedAlliance();
+    boolean redAlliance = false;
+
+    Pose2d startingPose = redAlliance ? new Pose2d(new Translation2d(Meter.of(16),
                                                                       Meter.of(4)),
-                                                    Rotation2d.fromDegrees(0))
-                                       : new Pose2d(new Translation2d(Meter.of(16),
+                                                    Rotation2d.fromDegrees(180))
+                                       : new Pose2d(new Translation2d(Meter.of(1),
                                                                       Meter.of(4)),
-                                                    Rotation2d.fromDegrees(180));
+                                                    Rotation2d.fromDegrees(0));
     try
     {
       swerveDrive = new SwerveParser(directory).createSwerveDrive(Constants.MAX_SPEED, startingPose);
@@ -453,6 +456,13 @@ public class SwerveSubsystem extends SubsystemBase {
                       rotation,
                       fieldRelative,
                       false); // Open loop is disabled since it shouldn't be used most of the time.
+  }
+  public void driveOpenLoop(Translation2d translation, double rotation, boolean fieldRelative)
+  {
+    swerveDrive.drive(translation,
+                      rotation,
+                      fieldRelative,
+                      true);
   }
 
   /**

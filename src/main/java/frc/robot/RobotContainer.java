@@ -10,6 +10,9 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveInputStream;
+
+import org.photonvision.PhotonUtils;
+
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -117,29 +120,30 @@ public class RobotContainer {
 
     if (Robot.isSimulation())
     {
-      Pose2d target = new Pose2d(new Translation2d(1, 4),
-                                 Rotation2d.fromDegrees(90));
+      Pose2d target = new Pose2d(new Translation2d(3, 4.3),
+                                 Rotation2d.fromDegrees(0));
       //drivebase.getSwerveDrive().field.getObject("targetPose").setPose(target);
-      driveDirectAngleKeyboard.driveToPose(() -> target,
+      driveAngularVelocityKeyboard.driveToPose(() -> target,
                                            new ProfiledPIDController(5,
                                                                      0,
                                                                      0,
                                                                      new Constraints(5, 2)),
-                                           new ProfiledPIDController(5,
+                                           new ProfiledPIDController(2,
                                                                      0,
                                                                      0,
                                                                      new Constraints(Units.degreesToRadians(360),
                                                                                      Units.degreesToRadians(180))
                                            ));
+      
       m_driverController.start().onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
       // m_driverController.button(1).whileTrue(drivebase.sysIdDriveMotorCommand());
-      m_driverController.button(2).whileTrue(Commands.runEnd(() -> driveDirectAngleKeyboard.driveToPoseEnabled(true),
-                                                     () -> driveDirectAngleKeyboard.driveToPoseEnabled(false)));
+      m_driverController.a().whileTrue(Commands.runEnd(() -> driveAngularVelocityKeyboard.driveToPoseEnabled(true),
+                                                     () ->   driveAngularVelocityKeyboard.driveToPoseEnabled(false)));
 
-//      m_driverController.b().whileTrue(
-//          drivebase.driveToPose(
-//              new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-//                              );
+    //  m_driverController.b().whileTrue(
+    //      drivebase.driveToPose( 
+    //          new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
+    //                          );
 
     }
     if (DriverStation.isTest())
@@ -147,7 +151,6 @@ public class RobotContainer {
       drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity); // Overrides drive command above!
 
       m_driverController.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-      m_driverController.y().whileTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
       m_driverController.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
       m_driverController.back().whileTrue(drivebase.centerModulesCommand());
       m_driverController.leftBumper().onTrue(Commands.none());
@@ -155,6 +158,9 @@ public class RobotContainer {
     } else
     {
       m_driverController.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+      m_driverController.y().whileTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
+
+      // m_driverController.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
       m_driverController.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
       m_driverController.start().whileTrue(Commands.none());
       m_driverController.back().whileTrue(Commands.none());
