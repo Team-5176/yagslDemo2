@@ -187,4 +187,4 @@ compile_commands.json
 .factorypath
 
 # Photonvision
-.photonvision_config/*
+photonvision_config/
