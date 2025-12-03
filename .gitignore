@@ -188,3 +188,4 @@ compile_commands.json
 
 # Photonvision
 photonvision_config/
+.Glass/glass.json
